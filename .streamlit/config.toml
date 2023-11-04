@@ -1,6 +1,9 @@
 [theme]
-primaryColor="#F39C12"
-backgroundColor="#2E86C1"
-secondaryBackgroundColor="#AED6F1"
+primaryColor="#E74C3C"
+backgroundColor="#27AE60"
+secondaryBackgroundColor="#82E0AA"
 textColor="#FFFFFF"
 font="monospace"
+
+[server]
+enableStaticServing = true
