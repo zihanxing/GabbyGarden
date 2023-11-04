@@ -9,9 +9,6 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from html_chatbot_template import css, bot_template, user_template
-from src.sound import sound
-from settings import IMAGE_DIR, DURATION, WAVE_OUTPUT_FILE
-
 
 def extract_text(pdf_files):
     """
@@ -141,7 +138,6 @@ def generate_response(question):
             st.write(bot_template.replace(
                 "{{MSG}}", message.content), unsafe_allow_html=True)
 
-
 ## Landing page UI
 def run_UI():
     """
@@ -172,61 +168,15 @@ def run_UI():
     # Set the page title
     st.header("Ask any questions you want~")
 
-    # Input text box for user query
-    # user_question = st.text_input("Upload your data and ask me anything?")
-    # Ask me
     # Check if the user has entered a query/prompt
     # if user_question:
     #     # Call the function to generate the response
     #     generate_response(user_question)
-    st.button("Ask me.")
+    # my_bar = st.progress(0)
     
-    option = st.selectbox(
-        "what is your favorite color?",
-        ("Blue", "Red", "Green")
-    )
-    if option:
-        st.write("Your favorite color is", option)
-    
-    st.code("""
-        [theme]
-        primaryColor="#F39C12"
-        backgroundColor="#2E86C1"
-        secondaryBackgroundColor="#AED6F1"
-        textColor="#FFFFFF"
-        font="monospace"
-        """)
-
-    number = st.sidebar.slider('Select a number:', 0, 10, 5)
-    st.write('Selected number from slider widget is:', number)
-    
-    my_bar = st.progress(0)
-
-    for percent_complete in range(100):
-        time.sleep(0.05)
-        my_bar.progress(percent_complete + 1)
-    # st.ballons()
-    
-    if st.button('Record'):
-        with st.spinner(f'Recording for {DURATION} seconds ....'):
-            sound.record()
-        st.success("Recording completed")
-
-    if st.button('Play'):
-        # sound.play()
-        try:
-            audio_file = open(WAVE_OUTPUT_FILE, 'rb')
-            audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format='audio/wav')
-        except:
-            st.write("Please record sound first")
-
     # Sidebar menu
     with st.sidebar:
-        st.subheader("MyStories")
-
-        # Document uploader
-        pdf_files = st.file_uploader("Upload a document you want to chat with", type="pdf", key="upload", accept_multiple_files=True)
+        st.subheader("About the app")
 
         # Process the document after the user clicks the button
         if st.button("Start Chatting ✨"):
@@ -234,13 +184,10 @@ def run_UI():
             with st.spinner("Processing"):
                 # Convert the PDF to raw text
                 raw_text = extract_text(pdf_files)
-                
                 # Get the chunks of text
                 chunks = get_chunks(raw_text)
-                
                 # Create a vector store for the chunks of text
                 vector_store = get_vectorstore(chunks)
-
                 # Create a conversation chain for the chat model
                 st.session_state.conversations = get_conversation_chain(vector_store)
 

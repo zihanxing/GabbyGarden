@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/macbookp/Desktop/Duke/Semester2023fall/AI Hackathon/interface_test/Chat-With-Documents/test"
+VIRTUAL_ENV="/Users/macbookp/Desktop/Duke/Semester2023fall/AI_Hackathon/Hack/test"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -59,7 +59,7 @@ if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     else
     if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
         # special case for Aspen magic directories
-        # see http://www.zetadev.com/software/aspen/
+        # see https://aspen.io/
         PS1="[`basename \`dirname \"$VIRTUAL_ENV\"\``] $PS1"
     else
         PS1="(`basename \"$VIRTUAL_ENV\"`)$PS1"

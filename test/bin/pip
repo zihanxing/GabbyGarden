@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/Users/macbookp/Desktop/Duke/Semester2023fall/AI Hackathon/interface_test/Chat-With-Documents/test/bin/python" "$0" "$@"
-' '''
+#!/Users/macbookp/Desktop/Duke/Semester2023fall/AI_Hackathon/Hack/test/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
