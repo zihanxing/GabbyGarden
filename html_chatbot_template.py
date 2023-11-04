@@ -81,3 +81,10 @@ user_template = '''
     </div>    
 </div>
 '''
+
+img_template='''
+    <div class="centered-image">
+        <img src="{{img}}" style="text-align: center;">
+        <img src="assets/pics/pic1.jpeg" style="text-align: center;">
+    </div>
+'''
