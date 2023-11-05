@@ -43,7 +43,6 @@ def generate_response(conversation_log):
             st.write(user_template.replace(
                 "{{MSG}}", message['content']), unsafe_allow_html=True)
 
-
                 
 def mic():
     state=st.session_state
