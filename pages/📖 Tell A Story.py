@@ -240,7 +240,17 @@ else:
         st.write("Now Let's Listen to a Story 🥳")
     del st.session_state["show_html"]
 
-
+with st.sidebar:
+    st.subheader("🧸 How to Play with Ask Me?")
+    st.markdown("""
+                 💡 Hey kiddo! Curiosity is fantastic! What can I assist you with?
+                 
+                 💡 Little genius! Ready to unravel some mysteries?
+                 
+                 💡 Hey curious mind! What's the question of the day?
+                 
+                 **JUST CLICK `Ask Me` button and SAY OUTLOUD 📣 you questions**
+                 """)
      
 
 # tell_story()
