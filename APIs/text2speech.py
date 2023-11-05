@@ -86,6 +86,8 @@ def get_speech_from_text(text, filename=None):
     input_files = mp3_files
     if filename:
         output_files = cur_path / Path(f"assets/{filename}.mp3")
+    else:
+        output_files = cur_path / Path(f"assets/speech.mp3")
     concatenate_wav_files(input_files, output_files)
         
         
