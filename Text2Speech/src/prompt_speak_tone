@@ -1,0 +1,281 @@
+1. '<speak>' token
+- usage: 
+	The root element of the SSML model response. The content within the token will be spoken by SSML model
+- example:  
+```
+<speak>my SSML content </speak>
+```
+
+------------------------------------------------------------
+
+2. '<break>' token
+
+-usage: 
+	An empty element that controls pausing or other prosodic boundaries between words. Using `<break>` between any pair of tokens is optional. If this element is not present between words, the break is automatically determined based on the linguistic context.
+
+-example: 
+
+```
+<speak>
+  Step 1, take a deep breath. <break time="200ms"/>
+  Step 2, exhale.
+  Step 3, take a deep breath again. <break strength="weak"/>
+  Step 4, exhale.
+</speak>
+```
+
+------------------------------------------------------------
+
+3. `<say‑as>` token
+
+-usage: 
+	This element lets you indicate information about the type of text construct that is contained within the element. It also helps specify the level of detail for rendering the contained text. The `<say‑as>` element has the required attribute, `interpret-as`, which determines how the value is spoken. Optional attributes `format` and `detail` may be used depending on the particular `interpret-as` value.
+
+-example: 
+
+The `interpret-as` attribute supports the following values: currency, telephone, verbatim
+
+3.1. 'currency' attribute
+-usage:
+	This attribute is used to speak out currency number.
+-example:
+```
+<speak>
+  <say-as interpret-as='currency' language='en-US'>$42.01</say-as>
+</speak>
+```
+
+3.2. telephone' attribute
+-usage:
+	This attribute is used to speak out telephone number. The following example is spoken as "one eight zero zero two zero two one two one two". If the "google:style" attribute is omitted, it speaks zero as letter O. The "google:style='zero-as-zero'" attribute currently only works in EN locales.
+-example:
+```
+<speak>
+<say-as interpret-as='telephone' google:style='zero-as-zero'>1800-202-1212</say-as>
+</speak>
+```
+
+3.3 verbatim' attribute
+-usage:
+	This attribute is used to enable model to spell out letter by letter:
+-example:
+```
+<speak>
+  <say-as interpret-as="verbatim">abcdefg</say-as>
+</speak>
+```
+
+3.4 date' attribute
+-usage:
+	The format attribute is a sequence of date field character codes. Supported field character codes in format are {y, m, d} for year, month, and day (of the month) respectively. If the field code appears once for year, month, or day then the number of digits expected are 4, 2, and 2 respectively. If the field code is repeated then the number of expected digits is the number of times the code is repeated. Fields in the date text may be separated by punctuation and/or spaces. The detail attribute controls the spoken form of the date. For detail='1' only the day fields and one of month or year fields are required, although both may be supplied. This is the default when less than all three fields are given. The spoken form is "The {ordinal day} of {month}, {year}". The following example is spoken as "The tenth of September, nineteen sixty"
+-example:
+```
+<speak>
+  <say-as interpret-as="date" format="yyyymmdd" detail="1">
+    1960-09-10
+  </say-as>
+</speak>
+```
+
+3.5 'characters' attribute
+-usage:
+	This attribute is used to spell out characters of a word. The following example is spoken as "C A N"
+-example:
+```
+<speak>
+<say-as interpret-as="characters">can</say-as>
+</speak>
+```
+   
+3.6 'cardinal' attribute
+-usage:
+	This attribute is used to speak out cardinal number. The following example is spoken as "Twelve thousand three hundred forty five" (for US English) or "Twelve thousand three hundred and forty five (for UK English)"
+-example:
+```
+<speak>
+  <say-as interpret-as="cardinal">12345</say-as>
+</speak>
+```
+
+3.7 'ordinal' attribute
+-usage:
+	This attribute is used to speak out ordinal number. The following example is spoken as "First"
+-example:
+```
+<speak>
+  <say-as interpret-as="ordinal">1</say-as>
+</speak>
+```
+
+3.8 'fraction' attribute
+-usage:
+	This attribute is used to speak out faraction number. The following example is spoken as "five and a half"
+-example:
+```
+<speak>
+  <say-as interpret-as="fraction">5+1/2</say-as>
+</speak>
+```
+
+3.9 'unit' attribute
+-usage:
+	This attribute is used to convert units to singular or plural depending on the number. The following example is spoken as "10 feet"
+-example:
+```
+<speak>
+  <say-as interpret-as="unit">10 foot</say-as>
+</speak>
+```
+
+3.10 'time' attribute
+-usage:
+	This attribute is used to speak out time. The following example is spoken as "Two thirty P.M."
+-example:
+```
+<speak>
+  <say-as interpret-as="time" format="hms12">2:30pm</say-as>
+</speak>
+```
+
+------------------------------------------------------------
+
+
+4. `<p>,<s>` token
+
+-usage: 
+	Sentence and paragraph elements. The best practices are Use <s>...</s> tags to wrap full sentences, especially if they contain SSML elements that change prosody (that is, <audio>, <break>, <emphasis>, <par>, <prosody>, <say-as>, <seq>, and <sub>). If a break in speech is intended to be long enough that you can hear it, use <s>...</s> tags and put that break between sentences.
+-example: 
+```
+<p><s>This is sentence one.</s><s>This is sentence two.</s></p>
+
+```
+
+------------------------------------------------------------
+
+5. `<sub>` token
+
+-usage: 
+	Indicate that the text in the alias attribute value replaces the contained text for pronunciation. You can also use the sub element to provide a simplified pronunciation of a difficult-to-read word. The example below demonstrates this use case in English abbreviation.
+-example: 
+```
+<sub alias="World Wide Web Consortium">W3C</sub>
+
+```
+
+------------------------------------------------------------
+6. `<mark>` token
+
+-usage: 
+	An empty element that places a marker into the text or tag sequence. It can be used to reference a specific location in the sequence or to insert a marker into an output stream for asynchronous notification.
+-example: 
+```
+<speak>
+Go from <mark name="here"/> here, to <mark name="there"/> there!
+</speak>
+
+```
+
+------------------------------------------------------------
+6. `<prosody>` token
+
+-usage: 
+	Used to customize the pitch, speaking rate, and volume of text contained by the element. Currently the `rate`, `pitch`, and `volume` attributes are supported. The `<prosody>` tags should only be used around a full sentence. Enclosing words within a sentence may cause unwanted pauses in speech.
+
+-example: 
+6.1 `pitch` attribute
+-usage:
+	the baseline pitch for the contained text. Although the exact meaning of "baseline pitch" will vary across synthesis processors, increasing/decreasing this value will typically increase/decrease the approximate pitch of the output. Legal values are: a number followed by "Hz", a relative change or "x-low", "low", "medium", "high", "x-high", or "default". Labels "x-low" through "x-high" represent a sequence of monotonically non-decreasing pitch levels.
+
+6.2 `rate` attribute
+-usage:
+	a change in the speaking rate for the contained text. Legal values are: a non-negative percentage or "x-slow", "slow", "medium", "fast", "x-fast", or "default". Labels "x-slow" through "x-fast" represent a sequence of monotonically non-decreasing speaking rates. When the value is a non-negative percentage it acts as a multiplier of the default rate. For example, a value of 100% means no change in speaking rate, a value of 200% means a speaking rate twice the default rate, and a value of 50% means a speaking rate of half the default rate. The default rate for a voice depends on the language and dialect and on the personality of the voice. The default rate for a voice should be such that it is experienced as a normal speaking rate for the voice when reading aloud text. Since voices are processor-specific, the default rate will be as well.
+
+6.3 `volume` attribute
+-usage:
+	the volume for the contained text. Legal values are: a number preceded by "+" or "-" and immediately followed by "dB"; or "silent", "x-soft", "soft", "medium", "loud", "x-loud", or "default". The default is +0.0dB. Specifying a value of "silent" amounts to specifying minus infinity decibels (dB). Labels "silent" through "x-loud" represent a sequence of monotonically non-decreasing volume levels. When the value is a signed number (dB), it specifies the ratio of the squares of the new signal amplitude (a1) and the current amplitude (a0), and is defined in terms of dB: volume(dB) = 20 log10 (a1 / a0). Note that all numerical volume levels (in dB) are relative to the current level and that they are always signed (including zero). Also note that once the current volume level is set to "silent" all child relative changes also result in silence. A child prosody element may use the label "default" to reset the current volume level. So that for a value of: "silent", the contained text is read silently; '-6.0dB', the contained text is read at approximately half the amplitude of the current signal amplitude; '-0dB', the contained text is read with no relative change in volume; '+6.0dB', the contained text is read at approximately twice the amplitude of the current signal amplitude.
+
+
+The following example uses the `<prosody>` element to speak slowly at 2 semitones lower than normal:
+```
+<prosody rate="slow" pitch="-2st">Can you hear me now?</prosody>
+
+```
+
+------------------------------------------------------------
+7. `<emphasis>` token
+
+-usage: 
+	Used to add or remove emphasis from text contained by the element. The `<emphasis>` element modifies speech similarly to `<prosody>`, but without the need to set individual speech attributes.
+
+-example: 
+
+This element supports an optional `level` attribute with the following valid values:
+
+7.1 strong
+7.2 moderate
+7.3 none
+7.4 reduced
+
+```
+<emphasis level="moderate">This is an important announcement</emphasis>
+```
+
+------------------------------------------------------------
+8. `<par>` token
+
+-usage: 
+	A parallel media container that allows you to play multiple media elements at once. The only allowed content is a set of one or more `<par>`, `<seq>`, and `<media>` elements. The order of the `<media>` elements is not significant. Unless a child element specifies a different begin time, the implicit begin time for the element is the same as that of the `<par>` container. If a child element has an offset value set for its begin or end attribute, the element's offset will be relative to the beginning time of the `<par>` container. For the root <par> element, the begin attribute is ignored and the beginning time is when SSML speech synthesis process starts generating output for the root `<par>` element (i.e. effectively time "zero").
+
+-example: 
+```
+<speak>
+  <par>
+    <media xml:id="question" begin="0.5s">
+      <speak>Who invented the Internet?</speak>
+    </media>
+    <media xml:id="answer" begin="question.end+2.0s">
+      <speak>The Internet was invented by cats.</speak>
+    </media>
+    <media begin="answer.end-0.2s" soundLevel="-6dB">
+      <audio
+        src="https://actions.google.com/.../cartoon_boing.ogg"/>
+    </media>
+    <media repeatCount="3" soundLevel="+2.28dB"
+      fadeInDur="2s" fadeOutDur="0.2s">
+      <audio
+        src="https://actions.google.com/.../cat_purr_close.ogg"/>
+    </media>
+  </par>
+</speak>
+```
+
+------------------------------------------------------------
+9. `<seq>` token
+
+-usage: 
+	A sequential media container that allows you to play media elements one after another. The only allowed content is a set of one or more `<seq>`, `<par>`, and `<media>` elements. The order of the media elements is the order in which they are rendered. The begin and end attributes of child elements can be set to offset values (see Time Specification below). Those child elements' offset values will be relative to the end of the previous element in the sequence or, in the case of the first element in the sequence, relative to the beginning of its `<seq>` container.
+
+-example: 
+```
+<speak>
+  <seq>
+    <media begin="0.5s">
+      <speak>Who invented the Internet?</speak>
+    </media>
+    <media begin="2.0s">
+      <speak>The Internet was invented by cats.</speak>
+    </media>
+    <media soundLevel="-6dB">
+      <audio
+        src="https://actions.google.com/.../cartoon_boing.ogg"/>
+    </media>
+    <media repeatCount="3" soundLevel="+2.28dB"
+      fadeInDur="2s" fadeOutDur="0.2s">
+      <audio
+        src="https://actions.google.com/.../cat_purr_close.ogg"/>
+    </media>
+  </seq>
+</speak>
+```
+
+
