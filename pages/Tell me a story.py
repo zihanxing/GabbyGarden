@@ -49,7 +49,13 @@ def generate_slides_html(base64_string_image_folder):
         i+=1
     return slides_html
 
-def display_tell_story():
+def display_tell_story(chunk_prompt):
+    images=[]
+    chunk=[]
+    for item in chunk_prompt:
+        temp_query=query({"inputs":item[1]})
+        images.append(Image.open(io.BytesIO(temp_query)))
+        chunk.append(item[0])
     image_bytes = query({
       "inputs": "Create a digital image of a child making a colorful greeting card for his best friend, filled with drawings of their favorite shared activities. Keep the style simple and cartoon-like for kids.",
     })
@@ -209,7 +215,7 @@ with col2:
 # 根据session_state的状态显示不同的内容
 if not st.session_state.show_html:
     # 显示HTML UI
-    display_tell_story()
+    display_tell_story(chunk_prompt)
 else:
     # 显示对话式UI
     # question = know()
