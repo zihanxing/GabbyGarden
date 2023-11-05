@@ -8,7 +8,10 @@ import io
 import requests
 import base64
 from datetime import datetime
-_CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
+from pages.askme import mic
+from streamlit_mic_recorder import speech_to_text
+
+# _CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 API_TOKEN="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"
 API_URL = "https://api-inference.huggingface.co/models/nerijs/pixel-art-xl"
 headers = {"Authorization": f"Bearer {API_TOKEN}"}
@@ -195,11 +198,13 @@ if 'show_html' not in st.session_state:
     st.session_state.show_html = False
 
 # 如果按钮被按下，切换状态
-if st.button('Switch to HTML UI'):
-    st.session_state.show_html = True
-
-if st.button('Switch to Conversation UI'):
-    st.session_state.show_html = False
+col1, col2 = st.columns(2)
+with col1:
+    if st.button('Switch to HTML UI'):
+        st.session_state.show_html = True
+with col2:
+    if st.button('Switch to Conversation UI'):
+        st.session_state.show_html = False
 
 # 根据session_state的状态显示不同的内容
 if not st.session_state.show_html:
@@ -207,8 +212,14 @@ if not st.session_state.show_html:
     display_tell_story()
 else:
     # 显示对话式UI
-    st.write('This is the conversation UI.')
-
+    # question = know()
+    question = "what kind of animal do you like?"
+    st.write(question)
+    ans = speech_to_text(language='en',start_prompt="Ask Me 😊",
+                        use_container_width=True,just_once=True,key='STT')
+    if ans:
+        st.write(ans)
+    # re = generate_story(mic())
 # 其他Streamlit内容
 # ...
 
