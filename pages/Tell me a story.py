@@ -11,7 +11,7 @@ from datetime import datetime
 from pages.askme import mic
 from streamlit_mic_recorder import speech_to_text
 from APIs.storyteller import ask_question, story_trunks
-from pages.helper import autoplay_audio
+from APIs.helper import autoplay_audio
 from APIs.text2speech import get_speech_from_text
 import json
 
@@ -70,13 +70,10 @@ def display_tell_story(chunk_prompt):
     duration = {}
     for i, text in enumerate(chunk):
         duration[i] = len(text.split(" "))/30*14000
-    # duration = [ int(len(text.split(" "))/30*14000) for text in chunk]
-    # list_1=[1,2,3,4,5]
-    # print(type(list_1))
+
     print(f"Duration: {duration}, Type: {type(duration)}")
     duration = json.dumps(duration)
     print(f"Duration: {duration}, Type: {type(duration)}")
-    # print(type(duration))
     
     get_speech_from_text(story ,'story')
     autoplay_audio('./assets/story.mp3')
@@ -163,11 +160,12 @@ def display_tell_story(chunk_prompt):
 
         <script>
         let slideIndex = 0;
-        showSlides();
         var duration = { duration };
         console.log(duration['0']);
         console.log(duration[1]);
         console.log(duration[2]);
+        
+        showSlides();
         
         function showSlides() {{
         let i;
@@ -234,7 +232,6 @@ if  st.session_state.show_html:
     display_tell_story(chunk_prompt)
 else:
     # 显示对话式UI
-    # question = know()
     st.session_state.question, st.session_state.log = ask_question()
     st.write(st.session_state.question)
     ans = speech_to_text(language='en',start_prompt="Let me know YOU 😊",
@@ -242,7 +239,7 @@ else:
     if ans:
         st.session_state.ans = ans
         st.write(ans)
-    # re = generate_story(mic())
+
 # 其他Streamlit内容
 # ...
 

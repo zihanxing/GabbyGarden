@@ -6,7 +6,7 @@ from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv()) # read local .env file
 from pathlib import Path
 openai.api_key  = os.getenv('OPENAI_API_KEY')
-from pages.helper import autoplay_audio
+from APIs.helper import autoplay_audio
 
 def ask_openai(messages, temperature=0.5):
     try:
