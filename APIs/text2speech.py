@@ -47,7 +47,7 @@ def get_speech_from_text(text, filename=None):
   
     speaker = "63b407a8241a82001d51b977"
     speed = 1.1
-    API_key= "76483c2a-140a-4f58-aa39-d32ea5e8dad8"
+    API_key= "a6221301-a711-45c9-b533-cf0596fc3318"
   
     cur_path = Path(os.getcwd())
     sent_list = sent_tokenize(text)
