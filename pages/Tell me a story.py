@@ -74,15 +74,23 @@ def display_tell_story(chunk_prompt):
     # list_1=[1,2,3,4,5]
     # print(type(list_1))
     print(f"Duration: {duration}, Type: {type(duration)}")
-    duration = json.dumps(duration)
-    print(f"Duration: {duration}, Type: {type(duration)}")
+    dict_as_json = json.dumps(duration)
+    print(f"Duration: {dict_as_json}, Type: {type(dict_as_json)}")
     # print(type(duration))
     
     get_speech_from_text(story ,'story')
     autoplay_audio('./assets/story.mp3')
-    
-    components.html(
-        f"""
+    # 你的Python字典
+    keys = [1, 2, 3, 4, 5]
+    squares_dict = {}  # 初始化一个空字典
+
+    for key in keys:
+        # 在循环中为字典的每个键赋值
+        squares_dict[key] = key ** 2
+
+    dict_as_json = json.dumps(squares_dict)
+
+    html_c=f"""
         <!DOCTYPE html>
         <html>
         <head>
@@ -163,11 +171,12 @@ def display_tell_story(chunk_prompt):
 
         <script>
         let slideIndex = 0;
+        var mytime = {dict_as_json};
+        console.log(mytime[0]);
+        console.log(mytime[1]);
+        console.log(mytime[2]);
         showSlides();
-        var duration = { duration };
-        console.log(duration['0']);
-        console.log(duration[1]);
-        console.log(duration[2]);
+
         
         function showSlides() {{
         let i;
@@ -180,13 +189,15 @@ def display_tell_story(chunk_prompt):
 
         slides[slideIndex-1].style.display = "block";  
 
-        setTimeout(showSlides, duration[slideIndex-1]); // Change image every 5 seconds
+        setTimeout(showSlides, mytime[slideIndex-1]); // Change image every 5 seconds
         }}
         </script>
         </body>
         </html> 
 
-            """,
+            """
+    components.html(html_c
+        ,
         height=600,
     )
     # get_speech_from_text(chunk[0], f'strory_{0}')
