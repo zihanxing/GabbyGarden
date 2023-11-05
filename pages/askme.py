@@ -1,15 +1,10 @@
 import streamlit as st
-from streamlit_mic_recorder import mic_recorder,speech_to_text
+from streamlit_mic_recorder import speech_to_text
 from dotenv import load_dotenv
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain
 from html_chatbot_template import css, bot_template, user_template
-import openai
 from APIs.talk import chat_with_child
 from APIs.text2speech import get_speech_from_text
+import base64
 
 def generate_response(conversation_log):
     """
@@ -48,7 +43,31 @@ def generate_response(conversation_log):
             # user message
             st.write(user_template.replace(
                 "{{MSG}}", message['content']), unsafe_allow_html=True)
-            
+
+def autoplay_audio(file_path: str):
+    with open(file_path, "rb") as f:
+        data = f.read()
+        b64 = base64.b64encode(data).decode()
+        md = f"""
+            <audio style="display:none;" id='hidden' controls autoplay="true">
+            <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+            </audio>
+            <script>
+                function toggleButtonVisibility() {{
+                    var button = document.getElementById("hidden");
+                    if (button.style.display === "none") {{
+                        button.style.display = "block";
+                    }} else {{
+                        button.style.display = "none";
+                    }}
+                }}
+            </script>
+            """
+        st.markdown(
+            md,
+            unsafe_allow_html=True,
+        )
+                
 def mic():
     state=st.session_state
 
@@ -66,6 +85,6 @@ def mic():
         log = chat_with_child(text)
         # st.markdown(log)
         generate_response(log)
-        
+        # autoplay_audio("./assets/speech.mp3")   
 
 mic()
