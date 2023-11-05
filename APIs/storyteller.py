@@ -71,6 +71,8 @@ def ask_question():
     return q, conversation_log
 
 def story_trunks(q, answer, conversation_log):
+    answer = answer.replace("\n", " ")
+    
     conversation_log.append({"role": "assistant", "content": q})
     conversation_log.append({"role": "user", "content": answer})
 
