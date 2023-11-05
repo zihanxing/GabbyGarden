@@ -30,9 +30,9 @@ def get_imagePrompt(text):
     ```{text}```
     """
     response = get_completion(prompt)
-    print()
-    print("Image Prompt:", response)
-    print()
+    # print()
+    # print("Image Prompt:", response)
+    # print()
     return response
 
 
@@ -97,8 +97,8 @@ def main():
     question, log = ask_question()
     input_answer = input(question)
     result = story_trunks(question, input_answer, log)
-    print(result)
-    print(result[0][0])
+    # print(result)
+    # print(result[0][0])
 
 
 if __name__ == '__main__':
