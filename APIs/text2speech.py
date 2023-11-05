@@ -1,39 +1,91 @@
 import requests
 import urllib.request
+from underthesea import sent_tokenize
+import os
+from pathlib import Path
+import numpy as np
+from scipy.io import wavfile
+from pathlib import Path
 
-# text = "Hi there, welcome to Genny. The Simple mode is perfect for creating single speaker short voiceovers. Simply pick your preferred speaker, type or copy and paste your script. Then, click the 'Generate' button to generate your voiceover in seconds. You will see the voiceover output on the right for you to freely share or download. For more advanced capabilities, video editing, or longer multi-speaker voiceover production, please checkout the Advanced mode instead. "
 
+def concatenate_strings(input_strings):
+    result = []
+    current_concatenation = input_strings[0]
+    
+    for string in input_strings[1:]:
+        if len(current_concatenation + string) <= 500:
+            current_concatenation += string
+        else:
+            result.append(current_concatenation)
+            current_concatenation = string
+    
+    result.append(current_concatenation)
+    return result
+
+def concatenate_wav_files(input_files, output_file):
+    # Read the first WAV file to get the sample rate and audio data type
+    sample_rate, audio_data = wavfile.read(input_files[0])
+    audio_dtype = audio_data.dtype
+
+    # Initialize an empty array to store concatenated audio data
+    concatenated_audio = audio_data
+
+    # Iterate through the remaining input files and concatenate audio data
+    for input_file in input_files[1:]:
+        _, audio_data = wavfile.read(input_file)
+
+        # # Ensure the sample rates and data types match before concatenating
+        # if audio_data.dtype != audio_dtype or audio_data.shape[1] != concatenated_audio.shape[1]:
+        #     raise ValueError("Incompatible audio formats. Sample rates and data types must match.")
+
+        concatenated_audio = np.concatenate((concatenated_audio, audio_data))
+
+    # Write the concatenated audio data to the output file
+    wavfile.write(output_file, sample_rate, concatenated_audio)
         
 def get_speech_from_text(text):
-    # settings
+  
     speaker = "63b407a8241a82001d51b977"
     speed = 0.85
-    API_key= "60cd1344-2f53-47c7-a205-5bb8e3e03822"
+    API_key= "28a42c12-967c-4c5f-8294-b5d3ce9c1b70"
+  
+    cur_path = Path(os.getcwd())
+    sent_list = sent_tokenize(text)
+    sent_concatenated = concatenate_strings(sent_list)
     
-    url = "https://api.genny.lovo.ai/api/v1/tts/sync"
-    payload = {  
+    mp3_files = []
+
+    for i, sent in enumerate(sent_concatenated):
+        url = "https://api.genny.lovo.ai/api/v1/tts/sync"
+        payload = {  
         "speed": speed,
-        "text": text,    
+        "text": sent,    
         "speaker": speaker, 
-    }
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "X-API-KEY": API_key
-    }
+        }
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "X-API-KEY": API_key
+        }
 
-    TTS_response = requests.post(url, json=payload, headers=headers)
+        TTS_response = requests.post(url, json=payload, headers=headers)
+        # retrive_url =  urllib.parse.urljoin("https://api.genny.lovo.ai/api/v1/tts/", TTS_response.json()["id"])
 
-    # retrive_url =  urllib.parse.urljoin("https://api.genny.lovo.ai/api/v1/tts/", TTS_response.json()["id"])
-  
-    retrive_url =  urllib.parse.urljoin("https://api.genny.lovo.ai/api/v1/tts/sync", TTS_response.json()["id"])
+        retrive_url =  urllib.parse.urljoin("https://api.genny.lovo.ai/api/v1/tts/sync", TTS_response.json()["id"])
 
-    headers = {
-        "x-api-key":API_key,
-        "accept": "application/json"
-    }
-  
-    retrive_response = requests.get(retrive_url, headers=headers)
-  
-    speech_url = retrive_response.json()["data"][0]["urls"][0]
-    urllib.request.urlretrieve(speech_url, "/Users/macbookp/Desktop/Duke/Semester2023fall/AI_Hackathon/Hack/assets/speech.mp3")
+        headers = {
+            "x-api-key":API_key,
+            "accept": "application/json"
+        }
+
+        retrive_response = requests.get(retrive_url, headers=headers)
+        speech_url = retrive_response.json()["data"][0]["urls"][0]
+        urllib.request.urlretrieve(speech_url,   cur_path / Path(f"assets/speech_{i}" + ".wav"))
+        mp3_files.append(cur_path / Path(f"assets/speech_{i}" + ".wav"))
+    print(mp3_files)
+    input_files = mp3_files
+    output_files = cur_path / Path("assets/text2speech.mp3")
+    concatenate_wav_files(input_files, output_files)
+        
+        
+    
