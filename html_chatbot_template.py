@@ -71,6 +71,20 @@ bot_template = '''
     </div>
     <div class="message">{{MSG}}</div>
 </div>
+<script>
+    async function displayTextWithTypingAnimation(text, speed) {
+        console.log(text)
+        for (const char of text) {
+            document.getElementById('chat-box').innerText += char;
+            await new Promise(resolve => setTimeout(resolve, speed)); // Delay between characters
+        }
+    }
+
+    const generatedText = "";
+    const typingSpeed = 50; // Adjust the speed (in milliseconds) between characters
+    console.log(generatedText)
+    displayTextWithTypingAnimation(generatedText, typingSpeed);
+</script>
 '''
 
 user_template = '''
