@@ -3,7 +3,6 @@ import streamlit as st
 
 def autoplay_audio(file_path: str):
     type = file_path.split('.')[-1]
-    print(type)
     with open(file_path, "rb") as f:
         data = f.read()
         b64 = base64.b64encode(data).decode()

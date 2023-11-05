@@ -56,10 +56,10 @@ def chat_with_child(user_message):
 
     # Add the chatbot's response to the conversation log
     conversation_log.append({"role": "assistant", "content": bot_response})
-    # get_speech_from_text(bot_response)
+    get_speech_from_text(bot_response)
     # audio_path = str(Path(os.getcwd()) / Path("assets/text2speech.mp3"))
     # st.audio(audio_path)
-    autoplay_audio("./assets/text2speech.mp3")
+    # autoplay_audio("./assets/text2speech.mp3")
     
     return conversation_log
         # flag = input("Do you want me to tell you more about this topic? (y/n)")

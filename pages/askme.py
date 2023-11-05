@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from html_chatbot_template import css, bot_template, user_template
 from APIs.talk import chat_with_child
 from APIs.text2speech import get_speech_from_text
+from pages.helper import autoplay_audio
 
 def generate_response(conversation_log):
     """
@@ -42,13 +43,15 @@ def generate_response(conversation_log):
             # user message
             st.write(user_template.replace(
                 "{{MSG}}", message['content']), unsafe_allow_html=True)
-
+    autoplay_audio("./assets/text2speech.mp3")  
                 
 def mic():
     state=st.session_state
 
     if 'text_received' not in state:
         state.text_received=[]
+    # if '_last_audio_id' not in state:
+    #     state._last_audio_id = 0
 
     c1=st.columns(1)
     # st.write("Convert speech to text:")

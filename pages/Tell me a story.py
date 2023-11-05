@@ -11,6 +11,9 @@ from datetime import datetime
 from pages.askme import mic
 from streamlit_mic_recorder import speech_to_text
 from APIs.storyteller import ask_question, story_trunks
+from pages.helper import autoplay_audio
+from APIs.text2speech import get_speech_from_text
+import json
 
 # _CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 API_TOKEN="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"
@@ -62,7 +65,22 @@ def display_tell_story(chunk_prompt):
     image_base64=pil_to_image(images)
     slides_html=generate_slides_html(image_base64)
     print(f"image_base64:{len(image_base64)}")
-
+    
+    story = " ".join(chunk)
+    duration = {}
+    for i, text in enumerate(chunk):
+        duration[i] = len(text.split(" "))/30*14000
+    # duration = [ int(len(text.split(" "))/30*14000) for text in chunk]
+    # list_1=[1,2,3,4,5]
+    # print(type(list_1))
+    print(f"Duration: {duration}, Type: {type(duration)}")
+    duration = json.dumps(duration)
+    print(f"Duration: {duration}, Type: {type(duration)}")
+    # print(type(duration))
+    
+    get_speech_from_text(story ,'story')
+    autoplay_audio('./assets/story.mp3')
+    
     components.html(
         f"""
         <!DOCTYPE html>
@@ -138,18 +156,19 @@ def display_tell_story(chunk_prompt):
 
         <h2>Automatic Slideshow</h2>
 
-        <div class="slideshow-container">
-            
+        <div class="slideshow-container"> 
             {slides_html}
-
         </div>
         <br>
-
 
         <script>
         let slideIndex = 0;
         showSlides();
-
+        var duration = { duration };
+        console.log(duration['0']);
+        console.log(duration[1]);
+        console.log(duration[2]);
+        
         function showSlides() {{
         let i;
         let slides = document.getElementsByClassName("mySlides");
@@ -161,7 +180,7 @@ def display_tell_story(chunk_prompt):
 
         slides[slideIndex-1].style.display = "block";  
 
-        setTimeout(showSlides, 8000); // Change image every 5 seconds
+        setTimeout(showSlides, duration[slideIndex-1]); // Change image every 5 seconds
         }}
         </script>
         </body>
@@ -170,6 +189,11 @@ def display_tell_story(chunk_prompt):
             """,
         height=600,
     )
+    # get_speech_from_text(chunk[0], f'strory_{0}')
+    # autoplay_audio(f'./assets/strory_{0}.mp3')
+    
+def hello(i):
+    print(f"hello world:{i}")
 
 def tell_story():
     img_path = "assets/pics/"
