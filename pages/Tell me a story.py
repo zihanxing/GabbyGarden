@@ -47,6 +47,7 @@ def generate_slides_html(base64_string_image_folder):
         </div>
         """
         slides_html += slide
+        print(f"iiiii:{i}")
         i+=1
     return slides_html
 
@@ -57,22 +58,10 @@ def display_tell_story(chunk_prompt):
         temp_query=query({"inputs":item[1]})
         images.append(Image.open(io.BytesIO(temp_query)))
         chunk.append(item[0])
-    image_bytes = query({
-      "inputs": "Create a digital image of a child making a colorful greeting card for his best friend, filled with drawings of their favorite shared activities. Keep the style simple and cartoon-like for kids.",
-    })
-    image_bytes_2 = query({
-      "inputs": "Create a colorful, cartoon-style image of a small child cheerfully helping with chores around the house, such as picking up toys and setting the table.",
-    })
-    image_bytes_3 = query({
-      "inputs": "Create a pixel art image of a child presenting a handmade gift to their father, using bright and simple flat colors. The father should look happy and the gift can be something like a drawing or a crafted item.",
-    })
-    # You can access the image with PIL.Image for example
-    images=[]
-    images.append(Image.open(io.BytesIO(image_bytes)))
-    images.append(Image.open(io.BytesIO(image_bytes_2)))
-    images.append(Image.open(io.BytesIO(image_bytes_3)))
+
     image_base64=pil_to_image(images)
     slides_html=generate_slides_html(image_base64)
+    print(f"image_base64:{len(image_base64)}")
 
     components.html(
         f"""
@@ -156,11 +145,6 @@ def display_tell_story(chunk_prompt):
         </div>
         <br>
 
-        <div style="text-align:center">
-        <span class="dot"></span> 
-        <span class="dot"></span> 
-        <span class="dot"></span> 
-        </div>
 
         <script>
         let slideIndex = 0;
@@ -174,13 +158,10 @@ def display_tell_story(chunk_prompt):
             slides[i].style.display = "none";  
         }}
         slideIndex++;
-        if (slideIndex > slides.length) {{slideIndex = 1}}    
-        for (i = 0; i < dots.length; i++) {{
-            dots[i].className = dots[i].className.replace(" active", "");
-        }}
+
         slides[slideIndex-1].style.display = "block";  
-        dots[slideIndex-1].className += " active";
-        setTimeout(showSlides, 5000); // Change image every 5 seconds
+
+        setTimeout(showSlides, 8000); // Change image every 5 seconds
         }}
         </script>
         </body>
