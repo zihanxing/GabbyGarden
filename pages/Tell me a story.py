@@ -10,6 +10,7 @@ import base64
 from datetime import datetime
 from pages.askme import mic
 from streamlit_mic_recorder import speech_to_text
+from APIs.storyteller import ask_question, story_trunks
 
 # _CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 API_TOKEN="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"
@@ -202,6 +203,12 @@ def tell_story():
 # 初始设置session_state的键，如果不存在
 if 'show_html' not in st.session_state:
     st.session_state.show_html = False
+if 'ans' not in st.session_state:
+    st.session_state.ans = ""
+if 'question' not in st.session_state:
+    st.session_state.question = ""
+if 'log' not in st.session_state:
+    st.session_state.log = []
 
 # 如果按钮被按下，切换状态
 col1, col2 = st.columns(2)
@@ -213,17 +220,22 @@ with col2:
         st.session_state.show_html = False
 
 # 根据session_state的状态显示不同的内容
-if not st.session_state.show_html:
+if  st.session_state.show_html:
     # 显示HTML UI
+    chunk_prompt = story_trunks(st.session_state.question, 
+                                st.session_state.ans,
+                                st.session_state.log)
+    st.write(chunk_prompt)
     display_tell_story(chunk_prompt)
 else:
     # 显示对话式UI
     # question = know()
-    question = "what kind of animal do you like?"
-    st.write(question)
+    st.session_state.question, st.session_state.log = ask_question()
+    st.write(st.session_state.question)
     ans = speech_to_text(language='en',start_prompt="Let me know YOU 😊",
-                        use_container_width=True,just_once=True,key='STT')
+                        use_container_width=True,just_once=True,key='ANS')
     if ans:
+        st.session_state.ans = ans
         st.write(ans)
     # re = generate_story(mic())
 # 其他Streamlit内容

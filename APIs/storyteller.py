@@ -50,7 +50,7 @@ def ask_openai(messages, temperature=0.5):
         return "I'm sorry, but I can't answer that question."
 
 def ask_question():
-    json_file = open("storyQ.json", "r")
+    json_file = open("./static/storyQ.json", "r")
     pre_questions = json.load(json_file)
     q_list = pre_questions['questions']
     json_file.close()
@@ -90,7 +90,14 @@ def story_trunks(q, answer, conversation_log):
         prompts.append(prompt)
     
     # merge each pair[grouped_sentences,prompts] into a list and return
-    return list(zip(grouped_sentences, prompts))
+    res=[]
+    for g,p in zip(grouped_sentences,prompts):
+        temp=[]
+        temp.append(g)
+        temp.append(p)
+        res.append(temp)
+        
+    return res
 
 
 def main():
