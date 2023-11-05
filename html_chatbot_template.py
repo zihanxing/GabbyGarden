@@ -77,7 +77,7 @@ user_template = '''
 <div class="chat-message user" style="display: flex; align-items: center; justify-content: flex-end;">
     <div class="message" style="order: 1;">{{MSG}}</div>
     <div class="avatar" style="order: 2; margin-left: 10px;">
-        <img src="https://raw.githubusercontent.com/architkaila/Chat-With-Documents/main/assets/user.jpg" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
+        <img src="app/static/cute_child.png" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
     </div>    
 </div>
 '''

@@ -81,62 +81,7 @@ def get_vectorstore(chunks):
 
     return vector_store
 
-def get_conversation_chain(vector_store):
-    """
-    Function to create a conversation chain for the chat model
 
-    Args:
-        vector_store (FAISS): The vector store for the chunks of text
-    
-    Returns:
-        conversation_chain (ConversationRetrievalChain): The conversation chain for the chat model
-    """
-    
-    # Initialize the chat model using Langchain OpenAi API
-    # Set the temperature and select the model to use
-    # Can replace this with any other chat model (Llama, Falcom, etc.)
-    llm = ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0.1)
-
-    # Initialize the chat memory
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-
-    # Create a conversation chain for the chat model
-    conversation_chain = ConversationalRetrievalChain.from_llm(
-        llm=llm, # Chat model
-        retriever=vector_store.as_retriever(), # Vector store
-        memory=memory, # Chat memory
-    )
-
-    return conversation_chain
-
-def generate_response(question):
-    """
-    Function to generate a response for the user query using the chat model
-
-    Args:
-        question (str): The user query
-
-    Returns:
-        response (str): The response from the chat model
-    """
-
-    # Get the response from the chat model for the user query
-    response = st.session_state.conversations({'question': question})
-
-    # Update the chat history
-    st.session_state.chat_history = response['chat_history']
-
-    # Add the response to the UI
-    for i, message in enumerate(st.session_state.chat_history):
-        # Check if the message is from the user or the chatbot
-        if i % 2 == 0:
-            # User message
-            st.write(user_template.replace(
-                "{{MSG}}", message.content), unsafe_allow_html=True)
-        else:
-            # Chatbot message
-            st.write(bot_template.replace(
-                "{{MSG}}", message.content), unsafe_allow_html=True)
 
 ## Landing page UI
 def run_UI():
