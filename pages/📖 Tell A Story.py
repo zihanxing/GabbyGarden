@@ -1,14 +1,10 @@
 import streamlit as st
-import os
 import time
 from PIL import Image
-from html_chatbot_template import img_template
 import streamlit.components.v1 as components
 import io
 import requests
 import base64
-from datetime import datetime
-from pages.askme import mic
 from streamlit_mic_recorder import speech_to_text
 from APIs.storyteller import ask_question, story_trunks
 from APIs.helper import autoplay_audio
@@ -51,7 +47,7 @@ def generate_slides_html(base64_string_image_folder):
         """
         slides_html += slide
         # print(f"iiiii:{i}")
-        # i+=1
+        i+=1
     return slides_html
 
 def display_tell_story(chunk_prompt):
