@@ -1,87 +1,7 @@
 import streamlit as st
 import time
 from dotenv import load_dotenv
-from PyPDF2 import PdfReader
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain
 from html_chatbot_template import css, bot_template, user_template
-
-def extract_text(pdf_files):
-    """
-    Function to extract the text from a PDF file
-
-    Args:
-        pdf_file (file): The PDF files to extract the text from
-
-    Returns:
-        text (str): The extracted text from the PDF file
-    """
-
-    # Initialize the raw text variable
-    text = ""
-
-    # Iterate over the documents
-    for pdf_file in pdf_files:
-        print("[INFO] Extracting text from {}".format(pdf_file.name))
-
-        # Read the PDF file
-        pdf_reader = PdfReader(pdf_file)
-
-        # Extract the text from the PDF pages and add it to the raw text variable
-        for page in pdf_reader.pages:
-            text += page.extract_text()
-    
-    return text
-
-def get_chunks(text):
-    """
-    Function to get the chunks of text from the raw text
-
-    Args:
-        text (str): The raw text from the PDF file
-
-    Returns:
-        chunks (list): The list of chunks of text
-    """
-
-    # Initialize the text splitter
-    splitter = CharacterTextSplitter(
-        separator="\n", # Split the text by new line
-        chunk_size=1000, # Split the text into chunks of 1000 characters
-        chunk_overlap=200, # Overlap the chunks by 200 characters
-        length_function=len # Use the length function to get the length of the text
-    )
-
-    # Get the chunks of text
-    chunks = splitter.split_text(text)
-
-    return chunks
-
-def get_vectorstore(chunks):
-    """
-    Function to create avector store for the chunks of text to store the embeddings
-
-    Args:
-        chunks (list): The list of chunks of text
-
-    Returns:
-        vector_store (FAISS): The vector store for the chunks of text
-    """
-
-    # Initialize the embeddings model to get the embeddings for the chunks of text
-    embeddings = OpenAIEmbeddings()
-
-    # Create a vector store for the chunks of text embeddings
-    # Can use any other online vector store (Elasticsearch, PineCone, etc.)
-    vector_store = FAISS.from_texts(texts=chunks, embedding=embeddings)
-
-    return vector_store
-
-
 
 ## Landing page UI
 def run_UI():
@@ -99,7 +19,7 @@ def run_UI():
     load_dotenv()
 
     # Set the page tab title
-    st.set_page_config(page_title="ChildPal", page_icon="🤖", layout="wide")
+    st.set_page_config(page_title="ChildPal", page_icon="🌼", layout="wide")
 
     # Add the custom CSS to the UI
     st.write(css, unsafe_allow_html=True)
@@ -111,30 +31,12 @@ def run_UI():
         st.session_state.chat_history = None
 
     # Set the page title
-    st.header("Ask any questions you want~ 🔎")
-
-    # Check if the user has entered a query/prompt
-    # if user_question:
-    #     # Call the function to generate the response
-    #     generate_response(user_question)
-    # my_bar = st.progress(0)
+    st.header("GabbyGarden 🌼\n \
+        Cultivating Curiosity with AI Companionship! ⭐️")
     
     # Sidebar menu
     with st.sidebar:
         st.subheader("About the app")
-
-        # Process the document after the user clicks the button
-        if st.button("Start Chatting ✨"):
-            # Add a progress spinner
-            with st.spinner("Processing"):
-                # Convert the PDF to raw text
-                raw_text = extract_text(pdf_files)
-                # Get the chunks of text
-                chunks = get_chunks(raw_text)
-                # Create a vector store for the chunks of text
-                vector_store = get_vectorstore(chunks)
-                # Create a conversation chain for the chat model
-                st.session_state.conversations = get_conversation_chain(vector_store)
 
 # Application entry point
 if __name__ == "__main__":

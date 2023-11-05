@@ -215,7 +215,7 @@ else:
     # question = know()
     question = "what kind of animal do you like?"
     st.write(question)
-    ans = speech_to_text(language='en',start_prompt="Ask Me 😊",
+    ans = speech_to_text(language='en',start_prompt="Let me know YOU 😊",
                         use_container_width=True,just_once=True,key='STT')
     if ans:
         st.write(ans)
