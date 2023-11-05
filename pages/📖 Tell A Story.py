@@ -230,6 +230,7 @@ if  st.session_state.show_html:
                                     st.session_state.log)
     # st.write(chunk_prompt)
     display_tell_story(chunk_prompt)
+    del st.session_state["show_html"]
     # st.ballons()
 else:
     # 显示对话式UI
@@ -241,6 +242,7 @@ else:
     if ans:
         st.session_state.ans = ans
         st.write("Now Let's Listen to a Story 🥳")
+    del st.session_state["show_html"]
 
 
      
