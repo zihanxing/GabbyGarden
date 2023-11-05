@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from html_chatbot_template import css, bot_template, user_template
 from APIs.talk import chat_with_child
 from APIs.text2speech import get_speech_from_text
-from pages.helper import autoplay_audio
+from APIs.helper import autoplay_audio
 
 def generate_response(conversation_log):
     """
