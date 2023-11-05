@@ -43,12 +43,15 @@ def mic():
         state.text_received=[]
     # if '_last_audio_id' not in state:
     #     state._last_audio_id = 0
+
     text=speech_to_text(language='en',start_prompt="Ask Me 😊",
                         use_container_width=True,just_once=True,key='STT')
     
     if text:       
         state.text_received.append(text)
+        # st.session_state.conversations = get_conversation_chain(text)
         log = chat_with_child(text)
+        # st.markdown(log)
         generate_response(log)
         # autoplay_audio("./assets/speech.mp3")   
 

@@ -31,8 +31,8 @@ def run_UI():
         st.session_state.chat_history = None
 
     # Set the page title
-    st.header("GabbyGarden 🌼\n \
-        Cultivating Curiosity with AI Companionship! ⭐️")
+    st.header("GabbyGarden 🌱\n \
+        Sowing Seeds of Knowledge and Imagination for Kids 💫")
     
     # Sidebar menu
     with st.sidebar:
