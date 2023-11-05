@@ -103,6 +103,7 @@ def story_trunks(q, answer, conversation_log):
 def main():
     question, log = ask_question()
     input_answer = input(question)
+
     result = story_trunks(question, input_answer, log)
     # print(result)
     # print(result[0][0])
