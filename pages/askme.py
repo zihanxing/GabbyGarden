@@ -4,17 +4,9 @@ from dotenv import load_dotenv
 from html_chatbot_template import css, bot_template, user_template
 from APIs.talk import chat_with_child
 from APIs.text2speech import get_speech_from_text
+from APIs.helper import autoplay_audio
 
 def generate_response(conversation_log):
-    """
-    Function to generate a response for the user query using the chat model
-
-    Args:
-        question (str): The user query
-
-    Returns:
-        response (str): The response from the chat model
-    """
 
     # Get the response from the chat model for the user query
     if "system" not in st.session_state:
@@ -42,16 +34,16 @@ def generate_response(conversation_log):
             # user message
             st.write(user_template.replace(
                 "{{MSG}}", message['content']), unsafe_allow_html=True)
-
+    autoplay_audio("./assets/speech.mp3")  
                 
 def mic():
     state=st.session_state
 
     if 'text_received' not in state:
         state.text_received=[]
+    # if '_last_audio_id' not in state:
+    #     state._last_audio_id = 0
 
-    c1=st.columns(1)
-    # st.write("Convert speech to text:")
     text=speech_to_text(language='en',start_prompt="Ask Me 😊",
                         use_container_width=True,just_once=True,key='STT')
     

@@ -11,6 +11,9 @@ from datetime import datetime
 from pages.askme import mic
 from streamlit_mic_recorder import speech_to_text
 from APIs.storyteller import ask_question, story_trunks
+from APIs.helper import autoplay_audio
+from APIs.text2speech import get_speech_from_text
+import json
 
 # _CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 API_TOKEN="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"
@@ -47,14 +50,20 @@ def generate_slides_html(base64_string_image_folder):
         </div>
         """
         slides_html += slide
-        print(f"iiiii:{i}")
-        i+=1
+        # print(f"iiiii:{i}")
+        # i+=1
     return slides_html
 
 def display_tell_story(chunk_prompt):
     images=[]
     chunk=[]
-    for item in chunk_prompt:
+    
+    progress_text = "Generating the Story 💨"
+    my_bar = st.progress(0, text=progress_text)
+
+    for i, item in enumerate(chunk_prompt):
+        my_bar.progress(int((i+1)/len(chunk_prompt)*100), text=progress_text)
+    # for item in chunk_prompt:
         temp_query=query({"inputs":item[1]})
         images.append(Image.open(io.BytesIO(temp_query)))
         chunk.append(item[0])
@@ -62,7 +71,19 @@ def display_tell_story(chunk_prompt):
     image_base64=pil_to_image(images)
     slides_html=generate_slides_html(image_base64)
     print(f"image_base64:{len(image_base64)}")
+    
+    story = " ".join(chunk)
+    duration = {}
+    for i, text in enumerate(chunk):
+        duration[i] = len(text.split(" "))/30*12000
 
+    print(f"Duration: {duration}, Type: {type(duration)}")
+    duration = json.dumps(duration)
+    print(f"Duration: {duration}, Type: {type(duration)}")
+    
+    get_speech_from_text(story ,'story')
+    autoplay_audio('./assets/story.mp3')
+    
     components.html(
         f"""
         <!DOCTYPE html>
@@ -138,18 +159,20 @@ def display_tell_story(chunk_prompt):
 
         <h2>Automatic Slideshow</h2>
 
-        <div class="slideshow-container">
-            
+        <div class="slideshow-container"> 
             {slides_html}
-
         </div>
         <br>
 
-
         <script>
         let slideIndex = 0;
+        var duration = { duration };
+        console.log(duration['0']);
+        console.log(duration[1]);
+        console.log(duration[2]);
+        
         showSlides();
-
+        
         function showSlides() {{
         let i;
         let slides = document.getElementsByClassName("mySlides");
@@ -161,7 +184,7 @@ def display_tell_story(chunk_prompt):
 
         slides[slideIndex-1].style.display = "block";  
 
-        setTimeout(showSlides, 8000); // Change image every 5 seconds
+        setTimeout(showSlides, duration[slideIndex-1]); // Change image every 5 seconds
         }}
         </script>
         </body>
@@ -170,16 +193,13 @@ def display_tell_story(chunk_prompt):
             """,
         height=600,
     )
+    # get_speech_from_text(chunk[0], f'strory_{0}')
+    # autoplay_audio(f'./assets/strory_{0}.mp3')
 
 def tell_story():
     img_path = "assets/pics/"
     st.audio("assets/example.mp3", format='audio/mp3')
-    
-# def pic_transit():
-#     for image in images: 
-#         st.session_state.img = image
-#         st.image(image, use_column_width='auto') 
-#         time.sleep(10) 
+
 
 # 初始设置session_state的键，如果不存在
 if 'show_html' not in st.session_state:
@@ -194,33 +214,33 @@ if 'log' not in st.session_state:
 # 如果按钮被按下，切换状态
 col1, col2 = st.columns(2)
 with col1:
-    if st.button('Switch to HTML UI'):
+    if st.button('Listen To A Story 📖'):
         st.session_state.show_html = True
 with col2:
-    if st.button('Switch to Conversation UI'):
+    if st.button("Do it Again 🔄"):
         st.session_state.show_html = False
-
+        
 # 根据session_state的状态显示不同的内容
 if  st.session_state.show_html:
     # 显示HTML UI
-    chunk_prompt = story_trunks(st.session_state.question, 
-                                st.session_state.ans,
-                                st.session_state.log)
-    st.write(chunk_prompt)
+    with st.spinner('Generating Prompts...💪🏻'):
+        time.sleep(5)
+        chunk_prompt = story_trunks(st.session_state.question, 
+                                    st.session_state.ans,
+                                    st.session_state.log)
+    # st.write(chunk_prompt)
     display_tell_story(chunk_prompt)
+    # st.ballons()
 else:
     # 显示对话式UI
-    # question = know()
     st.session_state.question, st.session_state.log = ask_question()
     st.write(st.session_state.question)
     ans = speech_to_text(language='en',start_prompt="Let me know YOU 😊",
                         use_container_width=True,just_once=True,key='ANS')
+        
     if ans:
         st.session_state.ans = ans
-        st.write(ans)
-    # re = generate_story(mic())
-# 其他Streamlit内容
-# ...
+        st.write("Now Let's Listen to a Story 🥳")
 
 
      
@@ -228,48 +248,3 @@ else:
 # tell_story()
 # pic_transit()
 
-
-# date=datetime.now()
-# ymd=date.strftime("%Y-%m-%d")
-# formatted_time = ymd+"-"+date.strftime("%H-%M-%S")
-# # 定义文件夹的名字
-# folder_name = f"static/{formatted_time}"
-
-# # 使用os模块的mkdir函数创建文件夹
-# try:
-#     os.mkdir(folder_name)
-#     print(f"Folder '{folder_name}' created successfully.")
-# except FileExistsError:
-#     print(f"Folder '{folder_name}' already exists.")
-
-# for img in images:
-#     date=datetime.now()
-#     ymd=date.strftime("%Y-%m-%d")
-#     formatted_time = ymd+"-"+date.strftime("%H-%M-%S")  
-    
-#     img.save(f'{folder_name}/{formatted_time}.jpg', 'JPEG')
-
-
-# # Function to generate the HTML for the image slides
-# def generate_slides_html_2(image_folder):
-#     images = os.listdir(image_folder)
-#     slides_html = ""
-#     for i,image in enumerate(images):
-        
-        
-#         slide = f"""
-#         <div class="mySlides fade">
-#             <div class="numbertext">{i + 1} / {len(images)}</div>
-#             <img src="app/static/{image}" style="width:100%">
-#             <div class="text">Caption for </div>
-#         </div>
-#         """
-#         slides_html += slide
-#     return slides_html
-
-# Directory where your images are stored
-# image_folder = "static"
-# image_folder=pil_to_image(images)
-# images = os.listdir(image_folder)
-# Call the function to generate the HTML for the slides
-# slides_html = generate_slides_html_2(folder_name)

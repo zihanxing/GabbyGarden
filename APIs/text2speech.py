@@ -43,11 +43,11 @@ def concatenate_wav_files(input_files, output_file):
     # Write the concatenated audio data to the output file
     wavfile.write(output_file, sample_rate, concatenated_audio)
         
-def get_speech_from_text(text):
+def get_speech_from_text(text, filename=None):
   
     speaker = "63b407a8241a82001d51b977"
-    speed = 0.85
-    API_key= "28a42c12-967c-4c5f-8294-b5d3ce9c1b70"
+    speed = 1.1
+    API_key= "eb1a4ef0-fc0f-4d35-a609-38f82e654484"
   
     cur_path = Path(os.getcwd())
     sent_list = sent_tokenize(text)
@@ -84,7 +84,10 @@ def get_speech_from_text(text):
         mp3_files.append(cur_path / Path(f"assets/speech_{i}" + ".wav"))
     print(mp3_files)
     input_files = mp3_files
-    output_files = cur_path / Path("assets/text2speech.mp3")
+    if filename:
+        output_files = cur_path / Path(f"assets/{filename}.mp3")
+    else:
+        output_files = cur_path / Path(f"assets/speech.mp3")
     concatenate_wav_files(input_files, output_files)
         
         

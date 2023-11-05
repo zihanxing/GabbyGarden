@@ -19,3 +19,4 @@ requests==2.27.1
 altair==4.0
 pydantic==1.10.9
 streamlit-mic-recorder
+underthesea
