@@ -2,7 +2,7 @@
 
 **Sowing Seeds of Knowledge and Imagination for Kids**
 
-*Hackathon Project By Juan Peng, Haoyang Ma, Hongxuan(Leo) Li, Zihan(Zach) Xing*
+*Hackathon Project By Juan Peng, Haoyang Ma, Hongxuan(Leo) Li and Zihan(Zach) Xing*
 
 
 ## 😇 Inspiration 
@@ -45,6 +45,5 @@ Looking ahead, we wish to expand the capabilities of GabbyGarden by adding more 
 
 To run the app on your own computer:
 ```
-$ source test/bin/activate
 $ streamlit run home.py
 ```
