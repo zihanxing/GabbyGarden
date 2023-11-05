@@ -37,7 +37,7 @@ We're immensely proud of creating an interactive and educational platform that c
 Through the development of GabbyGarden, we learned about the importance of user experience, especially when the users are children. We gained insights into how to process and simplify complex AI technology to make it accessible and beneficial for educational purposes. We also learned a lot about prompt engineering and the significance of tailoring interactions to fit the developmental stage of the users. Understanding the ethical considerations and implementing robust privacy measures for children's data was an important part of our learning curve.
 
 ## 🌟 What's next for GabbyGarden
-Looking ahead, we wish to expand the capabilities of GabbyGarden by adding more educational content and improving the AI's ability to handle a broader range of questions. We are looking to incorporate feedback from real-world users to refine and personalize the learning experience further. Developing additional safety features and parental controls will also be a priority. ## Inspiration
+Looking ahead, we wish to expand the capabilities of GabbyGarden by adding more educational content and improving the AI's ability to handle a broader range of questions. We are looking to incorporate feedback from real-world users to refine and personalize the learning experience further. Developing additional safety features and parental controls will also be a priority.
 
 
 ## 🚀 Get Started
