@@ -4,7 +4,8 @@
 
 *Hackathon Project By Juan Peng, Haoyang Ma, Hongxuan(Leo) Li and Zihan(Zach) Xing*
 
-![Alt text](image.png)
+_Click the picture to see the demo_
+[![Alt text](image.png)]](https://youtu.be/A4exOoKHNK4)
 
 ## 😇 Inspiration 
 We built GabbyGarden because we know kids are full of questions and love stories. Sometimes they ask things that even grown-ups don't know. We wanted to make sure they always have someone to talk to, who can answer their questions anytime. So, we made a friendly AI that can chat with them and tell them stories in a fun way. With GabbyGarden, kids can just speak up and listen to stories, making it easy for them to learn and have fun, even if they can't read or write yet. It's like having a smart friend who's always there to explore and learn with them.
